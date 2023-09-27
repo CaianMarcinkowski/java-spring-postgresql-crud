@@ -64,7 +64,7 @@ Esta tabela possui os seguintes campos:
 
 1. Certifique-se de ter o PostgreSQL instalado e configurado corretamente. Você pode encontrar informações sobre como fazer isso na documentação oficial do PostgreSQL. (https://www.postgresql.org/download/)
 
-2. Clone este repositório para o seu ambiente local. (https://github.com/CaianMarcinkowski/CRUD-PRODUCT.git)
+2. Clone este repositório para o seu ambiente local. (https://github.com/CaianMarcinkowski/java-spring-postgresql-crud.git)
 
 3. Configure as propriedades do banco de dados no arquivo `application.properties`. Você deve definir o URL do banco de dados, nome de usuário e senha de acordo com a sua configuração local.
 
