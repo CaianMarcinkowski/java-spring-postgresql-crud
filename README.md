@@ -16,9 +16,13 @@ Este é um projeto de CRUD (Create, Read, Update, Delete) implementado em Java c
 
 - **Flyway**: O Flyway é utilizado para gerenciar as migrações de banco de dados, garantindo que o banco de dados esteja sempre atualizado com as últimas alterações de esquema.
 
+- **Sistema de Autenticação com JWT**: Este projeto inclui um sistema de autenticação baseado em JWT (JSON Web Token) para garantir a segurança e a autenticação de usuários. O JWT é uma tecnologia amplamente utilizada para autenticação e autorização em aplicativos da web e fornece uma maneira segura de transmitir informações de autenticação entre o cliente e o servidor.
+
+- **BCrypt**: O BCrypt é um algoritmo de criptografia usado para armazenar senhas com segurança. Ele torna difícil para os invasores descobrirem senhas por meio de ataques de força bruta e usa um processo de "salting" para aumentar a segurança, garantindo que senhas idênticas tenham hashes diferentes. Isso ajuda a proteger as credenciais dos usuários de forma eficaz.
+
 ## Estrutura do Banco de Dados
 
-O projeto utiliza a seguinte estrutura de tabela no banco de dados PostgreSQL para armazenar informações sobre produtos:
+O projeto utiliza a seguinte estrutura de tabela no banco de dados PostgreSQL para armazenar informações sobre produtos e usuarios:
 
 ```sql
 CREATE TABLE product (
@@ -28,7 +32,6 @@ CREATE TABLE product (
     active boolean NOT NULL
 );
 ```
-
 Esta tabela possui os seguintes campos:
 
     id: Um identificador único para cada produto (chave primária).
@@ -38,6 +41,24 @@ Esta tabela possui os seguintes campos:
     price: O preço do produto.
 
     active: Um campo booleano que indica se o produto está ativo ou não.
+
+```sql
+CREATE TABLE Users(
+id SERIAL PRIMARY KEY NOT NULL,
+login TEXT NOT NULL UNIQUE,
+password TEXT NOT NULL,
+role TEXT NOT NULL
+);
+```
+Esta tabela possui os seguintes campos:
+
+    id: Um identificador único para cada usuario (chave primária).
+
+    login: O login do usuario, pode ser email, nome, nickname, etc...
+
+    password: A senha do usuario.
+
+    role: um campo para diferenciar usuarios como Admisnitradores e usuarios comuns.
 
 ## Como Executar o Projeto
 
@@ -63,11 +84,46 @@ O projeto oferece os seguintes endpoints para gerenciar os dados de produtos:
 
 - **DELETE /product/?id={id}**: Desativa um produto com base no seu ID. Certifique-se de passar o ID correto como parâmetro na URL.
 
+O sistema de autenticação com JWT oferece os seguintes endpoints para gerenciar a autenticação e autorização de usuários:
+
+- **POST /auth/login**: Permite que os usuários façam login no sistema e recebam um token JWT válido.
+
+- **POST /auth/register**: Permite que os usuários se registrem no sistema, criando uma nova conta com informações de autenticação.
+
+Certifique-se de seguir as instruções fornecidas na seção "Como Executar o Projeto" para configurar e usar o sistema de autenticação com JWT em seu ambiente local. Para exemplos de solicitações HTTP relacionadas à autenticação e ao uso de tokens JWT, consulte a seção "Exemplo de Uso".
+
 ## Exemplo de Uso
 
 Para interagir com a API, você pode utilizar ferramentas como o Postman ou fazer requisições HTTP diretamente.
 
+Para registrar um novo usuário no sistema, você precisa enviar um JSON com informações de registro, como nome de usuário, senha e outros detalhes relevantes.
+
+```bash
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+"login": "novousuario",
+"password": "senhadonovousuario",
+"role": "ADMIN" ou "USER"
+}
+```
+
+Para fazer login no sistema e obter um token JWT, você precisa enviar um JSON com as credenciais de login, como nome de usuário e senha.
+
+```bash
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+"login": "novousuario",
+"password": "senhadonovousuario"
+}
+```
+
 Aqui está um exemplo de solicitação HTTP para criar um novo produto:
+
+Obs.: Certifique-se de incluir o token JWT apropriado ("/auth/login") no cabeçalho da solicitação como "Authorization: Bearer {token}" para autenticar e acessar com sucesso este endpoint de criação de produtos.
 
 ```bash
 POST http://localhost:8080/product
@@ -80,6 +136,8 @@ Content-Type: application/json
 }
 ```
 
-Para obter a lista de produtos, você pode fazer uma solicitação GET para `http://localhost:8080/product`.
+Lembre-se de que esses são exemplos genéricos e que os nomes dos campos e os detalhes específicos podem variar dependendo da implementação real em seu projeto. Certifique-se de seguir as convenções e os campos definidos em sua própria implementação de autenticação JWT.
+
+Para obter a lista de produtos, você pode fazer uma solicitação GET para `http://localhost:8080/product`. No entanto, para acessar esta lista de produtos, é necessário fornecer um token JWT válido no cabeçalho da solicitação como "Authorization: Bearer {token}". Certifique-se de incluir o token JWT apropriado para autenticar e acessar com sucesso os recursos de produtos.
 
 Lembre-se de que este é apenas um projeto de exemplo e pode ser expandido e personalizado de acordo com as necessidades do seu próprio aplicativo.
