@@ -1,11 +1,12 @@
 package com.marcinkowski.CrudApplication.controller;
 
 import com.marcinkowski.CrudApplication.domain.product.Product;
-import com.marcinkowski.CrudApplication.domain.product.ProductRepository;
+import com.marcinkowski.CrudApplication.repositories.ProductRepository;
 import com.marcinkowski.CrudApplication.domain.product.RequestProduct;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.hibernate.validator.internal.util.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity registerProduct(@RequestBody @Valid RequestProduct data){
+
         Product product = new Product(data);
         repository.save(product);
         return ResponseEntity.ok().build();
